@@ -23,7 +23,16 @@ When a developer is working on a new version of the HTML file:
 
 ## 2. Production Update Workflow (On Server)
 
-To pull the new code into production and rebuild the container:
+You can update the production site manually or use the automated script.
+
+### Option A: Automated Script (Recommended)
+Run the following script to check for updates and rebuild only if changes exist:
+```bash
+/home/nutanix/plex-docker/builder/update_production.sh
+```
+
+### Option B: Manual Update
+To pull the new code into production and rebuild the container manually:
 
 1.  **Navigate to the builder directory**:
     ```bash
