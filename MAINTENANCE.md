@@ -40,22 +40,22 @@ To pull the new code into production and rebuild the container:
     docker compose up -d --build builder
     ```
 
-## 3. Preservation of Favicon
+## 3. Favicon Maintenance
 
-The system is configured to **always preserve the favicon** regardless of the HTML content.
+The system is configured to **preserve** the favicon regardless of the HTML content, but you can also **update** it easily.
 
-### How it works:
-In the `./builder/Dockerfile`, we explicitly copy the local `favicon.svg` into the Nginx image and overwrite the HTML to be the `index.html`:
+### How to Update the Favicon:
+1.  Replace the `favicon.svg` file in the root of the `builder` directory with your new SVG icon.
+2.  Commit and push the change:
+    ```bash
+    git add favicon.svg
+    git commit -m "Update favicon"
+    git push origin master
+    ```
+3.  Pull and rebuild on the production server (see Section 2).
 
-```dockerfile
-FROM nginx:alpine
-# This line takes WHATEVER html file exists and makes it the index
-COPY tech_profile_builder_v8.5.html /usr/share/nginx/html/index.html
-# This line ensures our specific favicon is ALWAYS used
-COPY favicon.svg /usr/share/nginx/html/favicon.svg
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
-```
+### How it works (Technical Detail):
+In the `./builder/Dockerfile`, we explicitly copy the local `favicon.svg` into the Nginx image. This ensures that even if a developer pushes a new HTML file that points to a different favicon path or doesn't include one, our specific `favicon.svg` is served at the root of the site.
 
 ### Important Note:
 If the filename of the HTML changes (e.g., to `v9.0.html`), you **must** update the `Dockerfile` to point to the new filename before running the production update.
